@@ -6,23 +6,27 @@ use ApiPlatform\Metadata\ApiResource;
 use App\Repository\ArticleRepository;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Serializer\Annotation\Groups;
 
 #[ORM\Entity(repositoryClass: ArticleRepository::class)]
-#[ApiResource()]
+#[ApiResource(normalizationContext: ['groups' => ['articles:list']])]
 class Article
 {
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column]
+    #[Groups(['articles:list'])]
     private ?int $id = null;
 
     #[ORM\Column(length: 255)]
     private ?string $name = null;
 
     #[ORM\Column(type: Types::TEXT)]
+    #[Groups(['articles:list'])]
     private ?string $description = null;
 
     #[ORM\ManyToOne(inversedBy: 'articles')]
+    #[Groups(['articles:list'])]
     private ?Category $category = null;
 
     public function getId(): ?int
